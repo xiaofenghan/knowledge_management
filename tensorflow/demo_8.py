@@ -1,5 +1,5 @@
 """
-一个回归例子
+一个 linear regression 回归例子
 """
 
 import tensorflow as tf
