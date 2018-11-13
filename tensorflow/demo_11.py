@@ -77,7 +77,7 @@ if __name__ == '__main__':
     #
     acc = tf.reduce_mean(tf.cast(tf.equal(tf.squeeze(prediction), tf.squeeze(y_input)), tf.float32))
 
-    # 
+    #
     opt = tf.train.GradientDescentOptimizer(0.002)
     step = opt.minimize(loss)
     init = tf.global_variables_initializer()
