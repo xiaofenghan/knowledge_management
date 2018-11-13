@@ -4,7 +4,7 @@ create time: 2018-11-06 23:10
 
 author: fnd_xiaofenghan
 
-content: svm using gaussian kernel 模型有一定问题，直接使用 libsvm 方便点
+content: svm using gaussian kernel
 """
 
 import matplotlib.pyplot as plt
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     y_input = tf.placeholder(tf.float32, shape=[None, 1])
 
     # batch_size
-    batch_size = 250
+    batch_size = 350
 
     # 给预测点分配一下占位符，用于后面画图
     x_input_new = tf.placeholder(tf.float32, shape=[None, 2])
@@ -67,17 +67,18 @@ if __name__ == '__main__':
     dist_old = tf.reshape(tf.reduce_sum(tf.square(x_input), 1), [-1, 1])
     dist_new = tf.reshape(tf.reduce_sum(tf.square(x_input_new), 1), [-1, 1])
 
-    pred_part = dist_old - 2*tf.matmul(dist_old, tf.transpose(dist_new)) + tf.transpose(dist_old)
+    pred_part = dist_old - 2*tf.matmul(x_input, tf.transpose(x_input_new)) + tf.transpose(dist_new)
     pred_kernel = tf.exp(gamma*tf.abs(pred_part))
     pred_output = tf.matmul(tf.multiply(tf.transpose(y_input), b), pred_kernel)
 
+    # 预测
     prediction = tf.sign(pred_output - tf.reduce_mean(pred_output))
 
-
+    #
     acc = tf.reduce_mean(tf.cast(tf.equal(tf.squeeze(prediction), tf.squeeze(y_input)), tf.float32))
 
-    #
-    opt = tf.train.GradientDescentOptimizer(0.001)
+    # 
+    opt = tf.train.GradientDescentOptimizer(0.002)
     step = opt.minimize(loss)
     init = tf.global_variables_initializer()
 
@@ -85,14 +86,30 @@ if __name__ == '__main__':
     sess.run(init)
 
     #
-    for i in range(500):
+    loss_ = []
+    acc_ = []
+    for i in range(1000):
         rand_index = np.random.choice(len(x_data), size=batch_size)
         rand_x = x_data[rand_index]
         rand_y = y_data[rand_index][:, np.newaxis]
         sess.run(step, feed_dict={x_input: rand_x, y_input: rand_y})
-        if i % 100 == 0:
-            temp_loss = sess.run(loss, feed_dict={x_input: rand_x, y_input: rand_y})
-            temp_acc = sess.run(acc, feed_dict={x_input: rand_x, y_input: rand_y, x_input_new: rand_x})
+
+        temp_loss = sess.run(loss, feed_dict={x_input: rand_x, y_input: rand_y})
+        temp_acc = sess.run(acc, feed_dict={x_input: rand_x, y_input: rand_y, x_input_new: rand_x})
+        loss_.append(temp_loss)
+        acc_.append(temp_acc)
+
+        if i % 250 == 0:
             print(i, temp_loss, temp_acc)
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(2,1,1)
+    ax1.plot(np.asarray(loss_), 'k-', label='loss')
+    ax1.legend(loc='Best')
+
+    ax2 = fig.add_subplot(2,1,2)
+    ax2.plot(np.asarray(acc_), 'k-', label='acc')
+    ax2.legend(loc='Best')
+    plt.show()
 
 
