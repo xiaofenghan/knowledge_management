@@ -36,11 +36,13 @@ def GBDT_classify():
     # ax.plot(y, 'r+')
     # plt.show()
 
-    gbdt = GradientBoostingRegressor(n_estimators=3, learning_rate=1, max_depth=3)
+    gbdt = GradientBoostingRegressor(n_estimators=2, learning_rate=1, max_depth=3)
     gbdt.fit(x_train, y_train)
     y_test_pred = gbdt.predict(x_test)[:, np.newaxis]
-
     print('mse ', mean_squared_error(y_test, y_test_pred))
+
+    # apply ???
+    print(gbdt.apply(x_test), y_test, y_test_pred)
 
     # 多少个树是最合适的？使用staged_
     # GradientBoostingRegressor中的learning_rate表示每棵树的学习权重，一般越小同时树越多，学习越精确，因此需要找到一个平衡
