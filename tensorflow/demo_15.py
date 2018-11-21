@@ -6,7 +6,7 @@ author: fnd_xiaofenghan
 
 content: GBDT and GBRT
 
-本质模型为加法模型，基函数为决策树，迭代拟合标注和模型的残差，来不断逼近损失函数最小化。
+本质模型为加法模型，基函数为决策树，迭代拟合标注和模型的残差，来不断逼近损失函数最小化
 
 """
 import matplotlib.pyplot as plt
