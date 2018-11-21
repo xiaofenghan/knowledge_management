@@ -7,5 +7,6 @@ author: fnd_xiaofenghan
 content: svm using sklearn
 
 """
+from sklearn.svm import SVC
 
 

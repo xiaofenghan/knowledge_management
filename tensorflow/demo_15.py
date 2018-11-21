@@ -5,6 +5,9 @@ create time: 2018-11-20 21:59
 author: fnd_xiaofenghan
 
 content: GBDT and GBRT
+
+本质模型为加法模型，基函数为决策树，迭代拟合标注和模型的残差，来不断逼近损失函数最小化。
+
 """
 import matplotlib.pyplot as plt
 import numpy as np
@@ -36,13 +39,14 @@ def GBRT():
     # ax.plot(y, 'r+')
     # plt.show()
 
-    gbdt = GradientBoostingRegressor(n_estimators=2, learning_rate=1, max_depth=3)
-    gbdt.fit(x_train, y_train)
-    y_test_pred = gbdt.predict(x_test)[:, np.newaxis]
+    gbrt = GradientBoostingRegressor(n_estimators=5, learning_rate=1, max_depth=3)
+    gbrt.fit(x_train, y_train)
+
+    y_test_pred = gbrt.predict(x_test)[:, np.newaxis]
     print('mse ', mean_squared_error(y_test, y_test_pred))
 
-    # apply ???
-    print(gbdt.apply(x_test), y_test, y_test_pred)
+    # apply 返回落在叶子的索引
+    # print(gbdt.apply(x_test), y_test, y_test_pred)
 
     # 多少个树是最合适的？使用staged_
     # GradientBoostingRegressor中的learning_rate表示每棵树的学习权重，一般越小同时树越多，学习越精确，因此需要找到一个平衡
@@ -60,6 +64,8 @@ def GBRT():
     ax = fig.add_subplot(1,1,1)
     ax.plot(error, 'r+')
     plt.show()
+    print('Done ! ')
+
 
 
 def step_by_step():
