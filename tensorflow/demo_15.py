@@ -19,9 +19,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import GradientBoostingRegressor
 
 
-def GBDT_classify():
+def GBRT():
     """
-    GBDT 的思路 类似于 第t个分类器是 将第t-1个分类器的预测偏差作为y，输入仍为X，串行计算
+    GBDT/GBRT 的思路 类似于 第t个分类器是 将第t-1个分类器的预测偏差作为y，输入仍为X，串行计算
     :return:
     """
     noise = np.random.uniform(-1, 1, 1000)
@@ -62,7 +62,7 @@ def GBDT_classify():
     plt.show()
 
 
-def gbdt_step_by_step():
+def step_by_step():
     """
     模拟gbdt的思路，分步骤单独写
     :return:
@@ -98,5 +98,5 @@ def gbdt_step_by_step():
 
 
 if __name__ == '__main__':
-    GBDT_classify()
+    GBRT()
     # gbdt_step_by_step()
